@@ -1,0 +1,2 @@
+iter::adapters::map::Map<vec::into_iter::IntoIter<i32>, {closure@src/main.rs:500:29: 500:32}>
+std::iter::Map<std::vec::IntoIter<i32>, {closure@src/main.rs:500:29: 500:32}>
