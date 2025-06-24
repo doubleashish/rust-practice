@@ -5,6 +5,9 @@ use rand::{Rng, thread_rng};
 use chrono::{Local, Utc};
 use std::collections::HashMap;
 use std::fmt::Display;
+use std::thread; //if use std::thread{self,spawn} then just writing spawn(...) spawns the thread
+use std::time::Duration;
+use std::sync::mpsc;
 /*
 cargo init
 If program compiles then it will run
@@ -95,12 +98,13 @@ reqwest sents http requests
 chrono for date and time
 
 
-
-
 Mutable references: */
 fn update(s: &mut String) {
     s.push_str("Works")
 }
+
+
+
 
 //STUCT
 struct User {
@@ -131,6 +135,12 @@ impl NoShape {
     }
 }
 
+
+
+
+
+
+
 //ENUMS:
 #[derive(Debug)]  //this helps in printing whole struct {:?} format which is used for structs
 enum Direction { //fixed value
@@ -147,7 +157,7 @@ enum Shape {
     Circle(f64),         
     Square(f64),         
     Rectangle(f64, f64),
-} 
+}
 fn calculate_area(shape: Shape) -> f64 {
 
     let created = match shape { //storing final value in created but only match works
@@ -163,6 +173,9 @@ fn calculate_area(shape: Shape) -> f64 {
 }
 
 
+
+
+
 //Option____________________________________________________________
 fn first_a(s: String) -> Option<i32> {  
     //if i write usize instead of i32 then no need for index as i32
@@ -174,6 +187,8 @@ fn first_a(s: String) -> Option<i32> {
         return Some(index as i32);}
     } return None;
 }
+
+
 
 
 
@@ -198,32 +213,15 @@ fn first_word(sentence: String) -> String {
 }
 
 
-fn is_even(num: i32)-> (bool){
-    //you can store more data in signed than in unsigned
-    if num % 2 == 0 {
-        return true;
-    } else{
-        return false;
-    }
-}
 
-fn fib(num: i32)-> i64{
-    let mut a = 0;
-    let mut b= 1;
 
-    if num == 1{
-        return a;
-    } if num ==2 {
-        return b;
-    } else {
-        for n in 0..num-1 {
-            let mut temp = b;
-            b = b + a;
-            a = temp;
-        }  b //implicit return
-    } 
-}
-//you cant define a function inside another in rust
+
+
+
+
+
+
+
 fn main() {
     println!("{}", is_even(24));
     println!("{}", fib(10));
@@ -303,6 +301,13 @@ fn main() {
 
 
 
+
+
+
+
+
+
+
     //_________________________________________________________________________________________________________________________
     //String is  a growable heap entitiy unlike &str which is just as it is
     //String::from is same as .to_string()
@@ -325,6 +330,18 @@ fn main() {
     let a3 = &a1;
     println!("{}", a3);
 
+
+
+
+
+
+
+
+
+
+
+
+
     //STRUCTS _______________________________________________________________
 
     let user = User {
@@ -344,6 +361,17 @@ fn main() {
     let cir = NoShape;
     println!("{}", cir.area());
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //____________ENUMS________________________________________
 
     //allow us to define types by enumerating its possible variants
@@ -378,8 +406,6 @@ fn main() {
     println!("Current directory: {:?}", std::env::current_dir());
     //this can give error be
 
-
-
     //____OPTION ENUM_______________________________________
 //handles null for rust
 //use when returned value cannot exist
@@ -387,7 +413,6 @@ fn main() {
 
 pub enum Option<T>{ //pub here makes the enum public to other modules
     None, Some(T)}
-    
 
 
     let mastring = String::from("hellow this is a string");
@@ -425,6 +450,13 @@ pub enum Option<T>{ //pub here makes the enum public to other modules
 
 
 
+
+
+
+
+
+
+
 //COLLECTIONS:____________________________________________________________________________________-
 //COLLECTION can contain multiple values, data is stored in heap
 //VECTORS
@@ -447,6 +479,15 @@ println!("{:?}", even_filter(&vec)); //value is ended after this
 
 
 
+
+
+
+
+
+
+
+
+
 //_____________________________________HASHMAPS_____________________________________
 //helps in keeping in key value pair
 //insert, get, remove, clear
@@ -463,6 +504,15 @@ match hashyuser{
 let vctr = vec![(String::from("Aashish"),29),(String::from("Avinash"),69)];
 let pvctr = shift(vctr);
 println!("{:?}", pvctr);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -531,12 +581,20 @@ println!("{}", name);
 //binary has hardcoded string literal
 //for i in ans.char() borrows the string but for i in num will own the string
 
+
+
+
+
+
+
+
+
+
+
 //GENERICS:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;;;
 let bigger = largest(1,2);
 let bigger_char = largest('a','b');
 println!("{},{}",bigger, bigger_char);
-
-
 
 //TRAITS___________________________________________________________________________________________
 //similar to interfaces in javascript
@@ -570,20 +628,134 @@ talk_twice(ccat);
 
 
 
+
+
+
+
+
+
+
+
+
+
 //LIFETIMES_________________________________________________________________________
 //you can define a value forst and then assign value: let a; a = "hi"
 //{values created in a scope} dont print outside the scope 
 fn main() {
     let ans;
     let str1 = String::from("small");
-{let str2 = String::from("longer");
-        ans = longest(&str1,&str2);} 
-//ans is point to a slice that goes out of scope so answer would be dangling pointer
+{let str2 = String::from("longer");}
+ans = &str1;
+        
+    //    ans = longest(&str1,&str2);} 
+
+    //ans is point to a slice that goes out of scope so answer would be dangling pointer
 //RUSTS ASKS FOR LIFETIME OF OUTPUT TO THE INPUT
   println!("{}", ans);}
+//now if str1 is longer  still compiler wont let the code run because of possibility of error
+
+
+//STRUCTS WITH LIFETIMES____________________________________________________________________________-
+let names = String::from("Checkthisout");
+let user = Userstruct{ name: &names};
+println!("{:?}", user.name); //the output has ""
+//"Lifetimes are used to get error in a good format"
+
+
+    let s1 = String::from("short");
+    let s2 = String::from("definitely longer");
+
+    let result = longest_with_an_announcement(&s1, &s2, "Choosing the longer string:");
+    println!("{}", "hello"); // Works — "hello" is a &str so any &str is a display type
+
+    println!("Longest is: {}", result);
 
 
 
+
+
+
+
+
+//MULTITHREADING______________________________________________________________________
+//thread pools in java
+//multiple requests can be handled by server if multiple threads are being used
+
+thread::spawn(|| {
+    for i in 1..9{
+        println!("hi numbr {i} from the spawned thread");
+        thread::sleep(Duration::from_millis(1));
+    }
+});
+//this is interweaving the threads
+//if let handle = thread::spawn(|| {
+//for i in 1..10{
+//println!("hi numbr {i} from the spawned thread");
+//thread::sleep(Duration::from_millis(1));}
+//handle.join().unwrap() will first wait for all threads to run then print the result together and then move to next thread
+
+//unless we spawn threads it runs in single thread only
+//we use move keyword with closures passed to threads because it will take ownership of values it takes
+//from environment thus transferring ownership of values from one thread to another
+//BASICALLY assigning a value and printing it in another thread errors
+
+let v = String::from("this is going in another thread");
+thread::spawn(move||{
+    println!("{}", v);
+    //thread::sleep(Duration::from_millis(1))
+}); 
+
+//MESSAGE PASSING ________________________________________________________________________________
+ //mpsc: multiple producer single consumer struct is used for this
+ let (tx, rx) = mpsc::channel();
+thread::spawn(move || {
+    tx.send(String::from("sending from thread")) //use .unwrap() if sure that it wont return error
+});
+let rvalue = rx.recv(); //rvalue sends a result
+match rvalue{
+    Ok(rvalue) => println!("{}",rvalue),
+    Err(err) => println!("error found")
+}
+
+//for multiple threads use tx1 = tx.clone() and pass it
+//single reciever can take all clones
+//you can spawn threads using a loop but in that case
+//drop(tx) cause reciever will keep on waiting for it to end even if all clones have ended
+//rx is a stream of data of a particular datatype
+//if threads are sending diff data then match it
+
+
+//pushing it here so program doesnt end before threads being completed
+for i in 1..11{ //after this program gets finished no matter the thread above is completed or not
+    println!("Hi number {i} from the main thread");
+    thread::sleep(Duration::from_millis(1));}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T, //can take slice, stirng, i32 etc etc
+) -> &'a str
+where
+    T: Display,  //similar to T: Display
+    {println!("Announcement! {ann}");
+    if x.len() > y.len() {x} 
+        else {y}
+}
+
+struct Userstruct<'a>{
+    name: &'a str,
 }
 
 //GENERIC LIFETIME ANNOTATION
@@ -593,7 +765,7 @@ fn longest<'a>(a: &'a str, b: &'a str) -> &'a str { //Similar to <T>
         return a;
     } else {
         return b;}}
-
+//
 
 trait Speak {
     fn speak(&self);
@@ -645,6 +817,33 @@ println!("{}", u.summarize()) //THIS IS SYNTACTICAL SUGAR FOR TRAIT BOUND
 //one generic(struct) can be bounded by multiple traits
 
 
+fn is_even(num: i32)-> (bool){
+    //you can store more data in signed than in unsigned
+    if num % 2 == 0 {
+        return true;
+    } else{
+        return false;
+    }
+}
+
+fn fib(num: i32)-> i64{
+    let mut a = 0;
+    let mut b= 1;
+
+    if num == 1{
+        return a;
+    } if num ==2 {
+        return b;
+    } else {
+        for n in 0..num-1 {
+            let mut temp = b;
+            b = b + a;
+            a = temp;
+        }  b //implicit return
+    } 
+}
+//you cant define a function inside another in rust
+
 fn largest<T: std::cmp::PartialOrd>(a:T, b:T)-> T{
     //this std::cmp(comparison) is use for comparing queries >,<,=>,=<
     //ord is in built in integers
@@ -695,13 +894,93 @@ struct Point<T, Y> {
 }
 
 
+/*
+true
+55
+Hello world!
+5 34 z: 23.23, xx: 430you are a male
+YOu are a legal male
+1
+2
+3
+4
+5
+14,14,0x5b4f4ad2db10
+hello aashish hello aashish ,aashish
+eNo character found
+This hellow again AFTER OWNERSHIP
+hellow again AFTER OWNERSHIP
+CHECKING IF IT WORKS? Works
+Hello from immutable/mutable
+Aashish,true
+9230,1866
+0
+North
+Hi fron enum function18
+Error found No such file or directory (os error 2)
+Current directory: Ok("/home/ash/Desktop/Coding/rust")
+15Nothing foundRandom number: 3191078156
+Current date and time in UTC: 2025-06-24 11:14:33.176901083 UTC
+Formatted date and time: 2025-06-24 11:14:33
+Current date and time in local: 2025-06-24 16:44:33.176935325 +05:30
+[1, 2, 3, 4, 5, 6]
+[2, 4, 6]
+["true", "hello", "Third value"]
+{"Avinash": 69, "Aashish": 22}
+69
+{"Aashish": 29, "Avinash": 69}
+[2, 3, 4, 5, 6, 7]
+value of vec is gone now, into_iter has it: IntoIter([2, 3, 4, 5, 6, 7])
+27
+Map { iter: Filter { iter: Iter([1, 2, 3, 4, 5, 6]) } }
+[2, 4, 6]
+Aashi_
+2,b
+The name is Harkirat, and age is 30
+The name is Harkirat, and age is 30
+hi there
+hi there
+Woof!
+Woof!
+Meow!
+Meow!
+"Checkthisout"
+Announcement! Choosing the longer string:
+hello
+Longest is: definitely longer
+hi numbr 1 from the spawned thread
+this is going in another thread
+sending from thread
+Hi number 1 from the main thread
+hi numbr 2 from the spawned thread
+Hi number 2 from the main thread
+hi numbr 3 from the spawned thread
+Hi number 3 from the main thread
+hi numbr 4 from the spawned thread
+Hi number 4 from the main thread
+hi numbr 5 from the spawned thread
+Hi number 5 from the main thread
+hi numbr 6 from the spawned thread
+Hi number 6 from the main thread
+hi numbr 7 from the spawned thread
+Hi number 7 from the main thread
+hi numbr 8 from the spawned thread
+Hi number 8 from the main thread
+Hi number 9 from the main thread
+Hi number 10 from the main thread
+*/
+
+
+//print! is a MACRO(single line of code that expands to more code ! is macro)
 //FMT in rust for debug and display use std::fmt;
 //impl fmt::Display for MyType {fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {// write something into `f'}}
 //let formatted = now.format("%Y-%m-%d %H:%M:%S"); dont know how this works
 //RAII pattern
 //Mix of datatypes in vectors
+//Shared state concurrency
 
-//tuple struct, unit struct, lifetimes, TRAITS(copy, clone)
+//tuple struct, unit struct, TRAITS(copy, clone)
+//ASYNC AWAIT AND TOKIO , FUTURES, MACROS
 //printing rectangle with fmt
 //can only fs have error that should have match code
 //Rand crate for random numbers
@@ -715,3 +994,5 @@ struct Point<T, Y> {
 // Here, Err isn’t a failure—it’s just a different outcome.
 // 2. Custom control flow: You might use Result to design early exits or decision points in a computation, even inside an app that isn’t “error-prone” by nature.
 // 3. Testing alternate business logic: For example, parsing a config file and intentionally using Result to return a default in the Err branch. It’s not wrong—it’s just fallback logic.
+
+//https://chatgpt.com/s/t_685a8c87b6748191a426fa9a9dd8b077
