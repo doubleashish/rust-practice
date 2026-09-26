@@ -1,4 +1,4 @@
-//https://projects.100xdevs.com/tracks/rust-bootcamp/Rust-Bootcamp-18 
+//https://projects.100xdevs.com/tracks/rust-bootcamp/Rust-Bootcamp-18
 
 use std::fs;
 use rand::{Rng, thread_rng};
@@ -53,7 +53,7 @@ Very fast allocation and deallocation eg boolean, numbers
 capacity(how much more can be stored), len(how many bytes currently used), ptr(pointer to 1st index address)
 this can be stored in stack because all these 3 things have known value
 Heap is for randomised data (variables whose data can be changed maybe via loop)
-eg vectors, strings 
+eg vectors, strings
 Heavy structs and arrrays are also stored in heap
 stack frame is word used for memory allocations in stack
 heap has dynamically allocated memory thats why slow
@@ -118,7 +118,7 @@ struct Rect {
     width: u32,
     length: u32,
 }
-impl Rect { 
+impl Rect {
     fn area(&self) -> u32 { //first argueemnt has to be reserved for &self if more arguements are added => only 1 argueemnt in callingh
         self.width * self.length //adding semicolor here makes it into a stateemnt not expression
     }
@@ -154,8 +154,8 @@ fn movear(_direction: Direction) {// this function can only have values of Direc
 }
 
 enum Shape {
-    Circle(f64),         
-    Square(f64),         
+    Circle(f64),
+    Square(f64),
     Rectangle(f64, f64),
 }
 fn calculate_area(shape: Shape) -> f64 {
@@ -177,7 +177,7 @@ fn calculate_area(shape: Shape) -> f64 {
 
 
 //Option____________________________________________________________
-fn first_a(s: String) -> Option<i32> {  
+fn first_a(s: String) -> Option<i32> {
     //if i write usize instead of i32 then no need for index as i32
     //usize is 32 for 32bit system, 64 for 64bit system
     for (index,character) in s.chars().enumerate(){
@@ -361,22 +361,22 @@ fn main() {
     let cir = NoShape;
     println!("{}", cir.area());
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
     //____________ENUMS________________________________________
 
     //allow us to define types by enumerating its possible variants
     //if you have limited variants with defined types then use enums
-    movear(Direction::North); 
+    movear(Direction::North);
 
     //ENUMS with shapes
 
@@ -421,7 +421,7 @@ pub enum Option<T>{ //pub here makes the enum public to other modules
         Some(location) => print!("{}", location),
         None=> println!("Nothing found")
     }
-    res2 = first_a(String::from("hellow this is 
+    res2 = first_a(String::from("hellow this is
     string"));
     match res2 {
         Some(location) => print!("{}", location),
@@ -432,7 +432,7 @@ pub enum Option<T>{ //pub here makes the enum public to other modules
     let mut rng = thread_rng();
     let n:u32 = rng.gen();
     println!("Random number: {}", n);
-    
+
 
     //CHRONO time ________________________________________________________________________________________________________________________
 
@@ -471,7 +471,7 @@ println!("{:?}", vec);
 
 println!("{:?}", even_filter(&vec)); //value is ended after this
 //i can send even_filter(&vec) and func input should also have vec: &vec<i32>
-//same ownership as strings, mutable, slice 
+//same ownership as strings, mutable, slice
 
  let mut num = vec!["true","hello","Third value"];
  println!("{:?}", num);
@@ -521,8 +521,8 @@ println!("{:?}", pvctr);
 //HELPS us to perform task over vector, string ,hashmaps
 //no effect unless we call methods that consume iterator
 
- let itrnum = vec.iter();   
- 
+ let itrnum = vec.iter();
+
  //no meaning of this, the variable is storing the iterator not any value
  //itrnum has the iterator typer
 //in for loops for i in num => num becomes an iterator
@@ -537,7 +537,7 @@ println!("{:?}", vec);
 
 //while let some(value) in mulitrnum.next()   //next returns an option some,none
 //println!("{}", val)                         //next brings the cursor to next index
-// let a = multirnum.next() will result and option but  after b and c, third value would be none 
+// let a = multirnum.next() will result and option but  after b and c, third value would be none
 //.iter is borrowing, mulitrnum is a mutable borrower
 //INTO ITER: converts collection to iterator by taking ownership (lose initial variable value)
 //it is used because .iter has the pointer to value but into iter has exact value
@@ -567,7 +567,7 @@ println!("{:?}", adaptitr); //ot returns iterator item of filter and map
     println!("{:?}", vec4);
 
 
-//STRING VS SLICES .////////////////////////////////////////////////////////////////////  
+//STRING VS SLICES .////////////////////////////////////////////////////////////////////
 //string is mut, growable, UTF8, owned (bytes are converted to utf8 representation)
 //&str slices are reference squence of elements in a collection (no ownership as it is reference)
 let mut name = String::from("Aashishkumar");
@@ -575,7 +575,7 @@ name.replace_range(5..name.len(), "_"); //replaces everything from 8th index to 
 println!("{}", name);
 
 
-//to return a view of the original string we use slices, so no extra data created 
+//to return a view of the original string we use slices, so no extra data created
 //name.clear() emties the string
 //String, String slice, String literal
 //binary has hardcoded string literal
@@ -640,14 +640,14 @@ talk_twice(ccat);
 
 //LIFETIMES_________________________________________________________________________
 //you can define a value forst and then assign value: let a; a = "hi"
-//{values created in a scope} dont print outside the scope 
+//{values created in a scope} dont print outside the scope
 fn main() {
     let ans;
     let str1 = String::from("small");
 {let str2 = String::from("longer");}
 ans = &str1;
-        
-    //    ans = longest(&str1,&str2);} 
+
+    //    ans = longest(&str1,&str2);}
 
     //ans is point to a slice that goes out of scope so answer would be dangling pointer
 //RUSTS ASKS FOR LIFETIME OF OUTPUT TO THE INPUT
@@ -703,7 +703,7 @@ let v = String::from("this is going in another thread");
 thread::spawn(move||{
     println!("{}", v);
     //thread::sleep(Duration::from_millis(1))
-}); 
+});
 
 //MESSAGE PASSING ________________________________________________________________________________
  //mpsc: multiple producer single consumer struct is used for this
@@ -750,7 +750,7 @@ fn longest_with_an_announcement<'a, T>(
 where
     T: Display,  //similar to T: Display
     {println!("Announcement! {ann}");
-    if x.len() > y.len() {x} 
+    if x.len() > y.len() {x}
         else {y}
 }
 
@@ -840,7 +840,7 @@ fn fib(num: i32)-> i64{
             b = b + a;
             a = temp;
         }  b //implicit return
-    } 
+    }
 }
 //you cant define a function inside another in rust
 
@@ -988,8 +988,8 @@ Hi number 10 from the main thread
 // 1. User-defined fallbacks or alternate branches
 // You might use Result<T, T> just to represent two different paths—even when both are valid:
 // fn maybe_caps(word: &str) -> Result<String, String> {
-//     if word.len() > 5 
-//     {Ok(word.to_uppercase()) // "Success" path} 
+//     if word.len() > 5
+//     {Ok(word.to_uppercase()) // "Success" path}
 //     else {Err(word.to_lowercase()) // "Alternate" path, not really an error } }
 // Here, Err isn’t a failure—it’s just a different outcome.
 // 2. Custom control flow: You might use Result to design early exits or decision points in a computation, even inside an app that isn’t “error-prone” by nature.
